@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Casa Morena – Menú</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #FDF3E3;
+      --cream-dark: #F0DDB8;
+      --brown-deep: #2E1200;
+      --brown-mid: #5C2800;
+      --terracota: #C94F1A;
+      --orange-warm: #E07020;
+      --gold: #B8770A;
+      --gold-light: #D4980E;
+      --olive: #5A6E2A;
+      --olive-light: #7A9438;
+      --olive-pale: #EDF2DC;
+      --pop: #E8B84B;
+      --text-main: #2E1200;
+      --text-muted: #6B3A10;
+      --fw: 72px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; background: #1a0800; font-family: 'Lato', sans-serif; overflow: hidden; }
+
+    /* FRAMES FIJOS — position fixed, no se mueven nunca */
+    .frame-side {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: var(--fw);
+      z-index: 100;
+      background-image: url('https://raw.githubusercontent.com/Hara000/Men-restaurante-mexa/main/Dise%C3%B1o%20sin%20t%C3%ADtulo.png');
+      background-repeat: no-repeat;
+      background-size: auto 100vh;
+    }
+    .frame-left  { left: calc(50% - 240px); background-position: left top; }
+    .frame-right { right: calc(50% - 240px); background-position: right top; }
+
+    /* CONTENEDOR CENTRAL — solo este scrollea */
+    #menu-scroll {
+      position: fixed;
+      top: 0; bottom: 0;
+      left: calc(50% - 240px + var(--fw));
+      right: calc(50% - 240px + var(--fw));
+      overflow-y: auto;
+      background: var(--cream);
+      scrollbar-width: none;
+    }
+    #menu-scroll::-webkit-scrollbar { display: none; }
+
+    /* HERO */
+    .hero {
+      background: var(--brown-deep);
+      padding: 2.5rem 1.2rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(45deg,transparent,transparent 16px,rgba(184,119,10,0.07) 16px,rgba(184,119,10,0.07) 17px);
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--olive), var(--pop), var(--olive));
+    }
+    .hero-border { border: 1px solid rgba(212,152,14,0.35); padding: 1.5rem 0.75rem; position: relative; }
+    .hero-eyebrow { font-size: 8px; font-weight: 300; letter-spacing: 0.4em; color: var(--gold-light); text-transform: uppercase; margin-bottom: 0.6rem; }
+    .hero-name { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; color: #FDF3E3; line-height: 1.1; margin-bottom: 0.2rem; }
+    .hero-sub { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.78rem; color: var(--gold-light); margin-bottom: 1rem; letter-spacing: 0.06em; }
+    .divider-gold { display: flex; align-items: center; gap: 8px; justify-content: center; margin: 0.6rem 0; }
+    .divider-gold::before, .divider-gold::after { content: ''; flex: 1; height: 0.5px; background: var(--gold); max-width: 45px; }
+    .divider-gem { width: 6px; height: 6px; background: var(--pop); transform: rotate(45deg); flex-shrink: 0; }
+    .hero-hours { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+    .hero-hours span { font-size: 10px; color: rgba(253,243,227,0.65); }
+    .hero-hours strong { color: var(--gold-light); font-weight: 400; }
+
+    /* NAV */
+    .sticky-nav {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--brown-mid);
+      border-bottom: 3px solid var(--olive);
+      display: flex; align-items: center; padding: 0 0.4rem;
+    }
+    .nav-links { display: flex; overflow-x: auto; scrollbar-width: none; flex: 1; }
+    .nav-links::-webkit-scrollbar { display: none; }
+    .nav-link {
+      font-size: 8px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(253,243,227,0.45); text-decoration: none;
+      padding: 0.6rem 0.45rem; white-space: nowrap;
+      border-bottom: 2px solid transparent; flex-shrink: 0;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--pop); border-bottom-color: var(--pop); }
+    .lang-switch { display: flex; gap: 3px; flex-shrink: 0; padding-left: 0.35rem; }
+    .lang-btn {
+      font-size: 8px; font-weight: 700; letter-spacing: 0.1em; padding: 3px 5px;
+      border: 0.5px solid rgba(212,152,14,0.35); background: transparent;
+      color: rgba(253,243,227,0.4); cursor: pointer; border-radius: 2px;
+    }
+    .lang-btn.active { background: var(--olive); color: #FDF3E3; border-color: var(--olive); }
+
+    /* SECCIONES */
+    .section-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--olive-pale); border-left: 3px solid var(--olive); padding: 3px 8px 3px 6px; border-radius: 0 4px 4px 0; margin-bottom: 0.4rem; }
+    .section-badge-dot { width: 5px; height: 5px; background: var(--olive); border-radius: 50%; flex-shrink: 0; }
+    .section-label { font-size: 8px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--olive); }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 600; color: var(--brown-deep); margin-bottom: 1rem; }
+    .menu-section { padding: 1.75rem 1rem 1.25rem; border-bottom: 1px solid var(--cream-dark); }
+    .menu-section:nth-child(even) { background: #FFF9EE; }
+
+    .orn-divider { display: flex; align-items: center; gap: 6px; margin-bottom: 1rem; }
+    .orn-divider::before, .orn-divider::after { content: ''; flex: 1; height: 0.5px; background: var(--olive-light); opacity: 0.4; }
+    .orn-center { display: flex; gap: 3px; align-items: center; }
+    .orn-dot { width: 4px; height: 4px; background: var(--olive); transform: rotate(45deg); opacity: 0.7; }
+    .orn-dot.big { width: 6px; height: 6px; background: var(--pop); opacity: 1; }
+
+    .menu-item { display: flex; align-items: flex-start; gap: 6px; padding: 0.65rem 0; border-bottom: 0.5px solid rgba(46,18,0,0.08); }
+    .menu-item:last-child { border-bottom: none; }
+    .item-info { flex: 1; }
+    .item-name { font-family: 'Playfair Display', serif; font-size: 0.9rem; color: var(--brown-deep); margin-bottom: 2px; }
+    .item-desc { font-size: 10px; color: var(--text-muted); line-height: 1.5; font-weight: 300; }
+    .item-dots { flex-shrink: 0; align-self: flex-end; height: 0.5px; width: 14px; background: rgba(46,18,0,0.15); margin-bottom: 5px; }
+    .item-price { font-size: 0.88rem; font-weight: 700; color: var(--terracota); white-space: nowrap; padding-top: 1px; flex-shrink: 0; }
+    .item-tag { display: inline-block; font-size: 7px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--pop); color: var(--brown-deep); padding: 1px 5px; border-radius: 2px; margin-left: 6px; vertical-align: middle; }
+    .item-tag.green { background: var(--olive-pale); color: var(--olive); }
+
+    .menu-footer { background: var(--brown-deep); padding: 1.5rem 1rem; text-align: center; border-top: 4px solid var(--olive); }
+    .footer-name { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; color: var(--gold-light); margin-bottom: 0.4rem; }
+    .footer-address { font-size: 9px; letter-spacing: 0.07em; color: rgba(253,243,227,0.38); margin-bottom: 0.2rem; }
+    .footer-line { font-size: 8px; letter-spacing: 0.15em; color: rgba(184,119,10,0.5); text-transform: uppercase; }
+
+    .whatsapp-btn {
+      position: fixed; bottom: 1.25rem;
+      left: calc(50% - 240px + var(--fw) + 8px);
+      z-index: 200; background: #25D366; color: #fff;
+      border: none; border-radius: 50px; padding: 0.6rem 1rem;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; gap: 7px;
+      text-decoration: none; box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+      font-family: 'Lato', sans-serif;
+    }
+    .whatsapp-btn svg { width: 18px; height: 18px; fill: #fff; flex-shrink: 0; }
+
+    /* Mobile: frames full width */
+    @media (max-width: 480px) {
+      .frame-left  { left: 0; }
+      .frame-right { right: 0; }
+      #menu-scroll {
+        left: var(--fw);
+        right: var(--fw);
+      }
+      .whatsapp-btn { left: calc(var(--fw) + 8px); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- FRAMES FIJOS — nunca se mueven -->
+<div class="frame-side frame-left" aria-hidden="true"></div>
+<div class="frame-side frame-right" aria-hidden="true"></div>
+
+<!-- SOLO ESTO SCROLLEA -->
+<div id="menu-scroll">
+
+  <div class="hero">
+    <div class="hero-border">
+      <p class="hero-eyebrow" id="txt-eyebrow">Cocina Mexicana de Autor</p>
+      <h1 class="hero-name">La Casa Morena</h1>
+      <p class="hero-sub" id="txt-sub">Tradición · Sabor · Elegancia</p>
+      <div class="divider-gold"><div class="divider-gem"></div></div>
+      <div class="hero-hours">
+        <span><strong id="txt-lv-label">Lun – Vie</strong>&nbsp; 1:00 pm – 10:00 pm</span>
+        <span><strong id="txt-sd-label">Sáb – Dom</strong>&nbsp; 12:00 pm – 11:00 pm</span>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sticky-nav">
+    <div class="nav-links">
+      <a href="#entradas" class="nav-link active" id="nav-entradas">Entradas</a>
+      <a href="#sopas" class="nav-link" id="nav-sopas">Sopas</a>
+      <a href="#fuertes" class="nav-link" id="nav-fuertes">Platos fuertes</a>
+      <a href="#postres" class="nav-link" id="nav-postres">Postres</a>
+      <a href="#bebidas" class="nav-link" id="nav-bebidas">Bebidas</a>
+    </div>
+    <div class="lang-switch">
+      <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </nav>
+
+  <section class="menu-section" id="entradas">
+    <div class="section-badge"><div class="section-badge-dot"></div><p class="section-label" id="lbl-entradas">Para comenzar</p></div>
+    <h2 class="section-title" id="ttl-entradas">Entradas</h2>
+    <div class="orn-divider"><div class="orn-center"><div class="orn-dot"></div><div class="orn-dot big"></div><div class="orn-dot"></div></div></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i1n">Guacamole de Molcajete</p><p class="item-desc" id="i1d">Aguacate hass, jitomate, cebolla morada, chile serrano, cilantro · totopos artesanales</p></div><div class="item-dots"></div><p class="item-price">$145</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i2n">Flautas de Barbacoa <span class="item-tag">Popular</span></p><p class="item-desc" id="i2d">Tres flautas de barbacoa de res, crema de rancho, queso añejo, salsa verde tatemada</p></div><div class="item-dots"></div><p class="item-price">$165</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i3n">Queso Fundido</p><p class="item-desc" id="i3d">Queso Chihuahua fundido, chorizo casero o rajas con elote, tortillas de maíz azul</p></div><div class="item-dots"></div><p class="item-price">$155</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i4n">Tostadas de Atún <span class="item-tag green">Chef</span></p><p class="item-desc" id="i4d">Atún sellado, aguacate, mayonesa de chipotle, pepino, ajonjolí tostado</p></div><div class="item-dots"></div><p class="item-price">$185</p></div>
+  </section>
+
+  <section class="menu-section" id="sopas">
+    <div class="section-badge"><div class="section-badge-dot"></div><p class="section-label" id="lbl-sopas">Del comal y la olla</p></div>
+    <h2 class="section-title" id="ttl-sopas">Sopas</h2>
+    <div class="orn-divider"><div class="orn-center"><div class="orn-dot"></div><div class="orn-dot big"></div><div class="orn-dot"></div></div></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i5n">Crema de Calabaza</p><p class="item-desc" id="i5d">Calabaza de Castilla, crema de coco, pepitas garrapiñadas, aceite de epazote</p></div><div class="item-dots"></div><p class="item-price">$120</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i6n">Caldo Tlalpeño</p><p class="item-desc" id="i6d">Caldo de pollo de rancho, garbanzo, chile chipotle ahumado, ejotes, epazote</p></div><div class="item-dots"></div><p class="item-price">$130</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i7n">Sopa de Lima <span class="item-tag">Popular</span></p><p class="item-desc" id="i7d">Receta yucateca, tortilla frita, pechuga deshebrada, lima agria, chile habanero</p></div><div class="item-dots"></div><p class="item-price">$125</p></div>
+  </section>
+
+  <section class="menu-section" id="fuertes">
+    <div class="section-badge"><div class="section-badge-dot"></div><p class="section-label" id="lbl-fuertes">Lo mejor de la casa</p></div>
+    <h2 class="section-title" id="ttl-fuertes">Platos Fuertes</h2>
+    <div class="orn-divider"><div class="orn-center"><div class="orn-dot"></div><div class="orn-dot big"></div><div class="orn-dot"></div></div></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i8n">Pollo en Mole Negro <span class="item-tag green">Chef</span></p><p class="item-desc" id="i8d">Muslo de pollo confitado, mole negro oaxaqueño de 27 ingredientes, arroz rojo, frijoles negros</p></div><div class="item-dots"></div><p class="item-price">$285</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i9n">Arrachera a la Parrilla</p><p class="item-desc" id="i9d">250g de arrachera marinada en naranja y chile ancho, cebolla asada, guacamole, tortillas</p></div><div class="item-dots"></div><p class="item-price">$345</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i10n">Cochinita Pibil <span class="item-tag">Popular</span></p><p class="item-desc" id="i10d">Cochinita marinada en achiote y naranja agria, cebolla morada encurtida, frijoles colados, tortillas de maíz</p></div><div class="item-dots"></div><p class="item-price">$265</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i11n">Camarones al Ajillo</p><p class="item-desc" id="i11d">Camarones jumbo, mantequilla clarificada, ajo negro, chile de árbol seco, arroz blanco</p></div><div class="item-dots"></div><p class="item-price">$365</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i12n">Chiles en Nogada <span class="item-tag green">Temporada</span></p><p class="item-desc" id="i12d">Chile poblano, picadillo de temporada, nogada de nuez de castilla, granada, perejil</p></div><div class="item-dots"></div><p class="item-price">$315</p></div>
+  </section>
+
+  <section class="menu-section" id="postres">
+    <div class="section-badge"><div class="section-badge-dot"></div><p class="section-label" id="lbl-postres">El dulce final</p></div>
+    <h2 class="section-title" id="ttl-postres">Postres</h2>
+    <div class="orn-divider"><div class="orn-center"><div class="orn-dot"></div><div class="orn-dot big"></div><div class="orn-dot"></div></div></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i13n">Pastel de Tres Leches <span class="item-tag">Popular</span></p><p class="item-desc" id="i13d">Bizcocho esponjado, tres leches, coulis de mango ataulfo, coco rallado tostado</p></div><div class="item-dots"></div><p class="item-price">$115</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i14n">Churros con Chocolate</p><p class="item-desc" id="i14d">Churros de masa choux, canela, chocolate oaxaqueño oscuro para bañar</p></div><div class="item-dots"></div><p class="item-price">$105</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i15n">Flan Napolitano</p><p class="item-desc" id="i15d">Flan de queso crema, caramelo artesanal, mermelada de tamarindo, flor de sal</p></div><div class="item-dots"></div><p class="item-price">$95</p></div>
+  </section>
+
+  <section class="menu-section" id="bebidas">
+    <div class="section-badge"><div class="section-badge-dot"></div><p class="section-label" id="lbl-bebidas">Para acompañar</p></div>
+    <h2 class="section-title" id="ttl-bebidas">Bebidas</h2>
+    <div class="orn-divider"><div class="orn-center"><div class="orn-dot"></div><div class="orn-dot big"></div><div class="orn-dot"></div></div></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i16n">Agua de Flor de Jamaica</p><p class="item-desc" id="i16d">Jamaica orgánica, piloncillo, canela, limón</p></div><div class="item-dots"></div><p class="item-price">$65</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i17n">Horchata de Arroz</p><p class="item-desc" id="i17d">Arroz, canela, vainilla de Papantla, almendra</p></div><div class="item-dots"></div><p class="item-price">$65</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i18n">Margarita Clásica <span class="item-tag">Popular</span></p><p class="item-desc" id="i18d">Tequila blanco, triple sec, limón fresco, sal de gusano</p></div><div class="item-dots"></div><p class="item-price">$145</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i19n">Mezcal Negroni <span class="item-tag green">Chef</span></p><p class="item-desc" id="i19d">Mezcal joven, Campari, vermut rosso, naranja deshidratada</p></div><div class="item-dots"></div><p class="item-price">$175</p></div>
+    <div class="menu-item"><div class="item-info"><p class="item-name" id="i20n">Café de Olla</p><p class="item-desc" id="i20d">Café de Veracruz, piloncillo, canela, clavo · servido en ollita de barro</p></div><div class="item-dots"></div><p class="item-price">$75</p></div>
+  </section>
+
+  <footer class="menu-footer">
+    <div class="divider-gold" style="margin-bottom:0.9rem;"><div class="divider-gem"></div></div>
+    <p class="footer-name">La Casa Morena</p>
+    <p class="footer-address" id="txt-addr">Av. Reforma 412, Col. Centro · Guadalajara, Jalisco</p>
+    <p class="footer-address">Tel. (33) 1234-5678</p>
+    <div class="divider-gold" style="margin:0.65rem 0;"><div class="divider-gem"></div></div>
+    <p class="footer-line" id="txt-reserve">Reservaciones por WhatsApp</p>
+  </footer>
+
+</div>
+
+<a class="whatsapp-btn" href="https://wa.me/523312345678" target="_blank">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  Reservar
+</a>
+
+<script>
+const T={es:{eyebrow:"Cocina Mexicana de Autor",sub:"Tradición · Sabor · Elegancia",lvLabel:"Lun – Vie",sdLabel:"Sáb – Dom",navEntradas:"Entradas",navSopas:"Sopas",navFuertes:"Platos fuertes",navPostres:"Postres",navBebidas:"Bebidas",lblEntradas:"Para comenzar",ttlEntradas:"Entradas",lblSopas:"Del comal y la olla",ttlSopas:"Sopas",lblFuertes:"Lo mejor de la casa",ttlFuertes:"Platos Fuertes",lblPostres:"El dulce final",ttlPostres:"Postres",lblBebidas:"Para acompañar",ttlBebidas:"Bebidas",addr:"Av. Reforma 412, Col. Centro · Guadalajara, Jalisco",reserve:"Reservaciones por WhatsApp"},en:{eyebrow:"Signature Mexican Cuisine",sub:"Tradition · Flavor · Elegance",lvLabel:"Mon – Fri",sdLabel:"Sat – Sun",navEntradas:"Starters",navSopas:"Soups",navFuertes:"Main Courses",navPostres:"Desserts",navBebidas:"Drinks",lblEntradas:"To begin",ttlEntradas:"Starters",lblSopas:"From the pot",ttlSopas:"Soups",lblFuertes:"House favorites",ttlFuertes:"Main Courses",lblPostres:"A sweet ending",ttlPostres:"Desserts",lblBebidas:"To accompany",ttlBebidas:"Drinks",addr:"412 Reforma Ave., Downtown · Guadalajara, Jalisco",reserve:"Reservations via WhatsApp"}};
+
+function setLang(lang){
+  const t=T[lang];
+  ['txt-eyebrow','txt-sub','txt-lv-label','txt-sd-label','txt-addr','txt-reserve'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.textContent=t[id.replace('txt-','').replace('-label','Label').replace(/-([a-z])/g,(_,c)=>c.toUpperCase())];
+  });
+  document.getElementById('txt-eyebrow').textContent=t.eyebrow;
+  document.getElementById('txt-sub').textContent=t.sub;
+  document.getElementById('txt-lv-label').textContent=t.lvLabel;
+  document.getElementById('txt-sd-label').textContent=t.sdLabel;
+  document.getElementById('txt-addr').textContent=t.addr;
+  document.getElementById('txt-reserve').textContent=t.reserve;
+  ['entradas','sopas','fuertes','postres','bebidas'].forEach(s=>{
+    const k=s.charAt(0).toUpperCase()+s.slice(1);
+    document.getElementById('nav-'+s).textContent=t['nav'+k];
+    document.getElementById('lbl-'+s).textContent=t['lbl'+k];
+    document.getElementById('ttl-'+s).textContent=t['ttl'+k];
+  });
+  document.getElementById('btn-es').classList.toggle('active',lang==='es');
+  document.getElementById('btn-en').classList.toggle('active',lang==='en');
+}
+
+const sections=['entradas','sopas','fuertes','postres','bebidas'];
+const scroll=document.getElementById('menu-scroll');
+scroll.addEventListener('scroll',()=>{
+  let current='entradas';
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el && el.offsetTop - scroll.scrollTop < 120) current=id;
+  });
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  const a=document.getElementById('nav-'+current);
+  if(a) a.classList.add('active');
+});
+
+document.querySelectorAll('.nav-link').forEach(link=>{
+  link.addEventListener('click',e=>{
+    e.preventDefault();
+    const target=link.getAttribute('href').replace('#','');
+    const el=document.getElementById(target);
+    if(el) scroll.scrollTo({top:el.offsetTop-42,behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>
